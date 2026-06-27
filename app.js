@@ -76,9 +76,14 @@ async function resolvePreviewImage(url) {
 
 function loadThumb(containerEl, url, searchFallback) {
   resolvePreviewImage(url).then(imgUrl => {
+    // bail out if this container was removed from the DOM by a re-render
+    if (!containerEl.isConnected) return;
+
     // if no OG image found and we have a search term, use Unsplash
+    // nonce prevents browser from serving a cached redirect meant for a different item
+    const nonce = Math.random().toString(36).slice(2, 7);
     const src = imgUrl || (searchFallback
-      ? `https://source.unsplash.com/400x300/?food,${encodeURIComponent(searchFallback)}`
+      ? `https://source.unsplash.com/400x300/?food,${encodeURIComponent(searchFallback)}&nonce=${nonce}`
       : null);
     if (!src) return;
 
@@ -87,6 +92,7 @@ function loadThumb(containerEl, url, searchFallback) {
     img.alt = '';
     img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
     img.onload = () => {
+      if (!containerEl.isConnected) { img.remove(); return; }
       const ph = containerEl.querySelector('.recent-thumb-placeholder, .thumb-placeholder');
       if (ph) ph.style.display = 'none';
     };
