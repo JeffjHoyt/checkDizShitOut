@@ -52,7 +52,19 @@ function getYouTubeId(url) {
   return m ? m[1] : null;
 }
 
+// in-memory cache for this session
 const previewCache = {};
+
+// persistent cache so the same recipe always shows the same image across reloads
+function getPersistedImageCache() {
+  try { return JSON.parse(localStorage.getItem('imageCache')) || {}; }
+  catch { return {}; }
+}
+function setPersistedImage(itemId, src) {
+  const cache = getPersistedImageCache();
+  cache[itemId] = src;
+  localStorage.setItem('imageCache', JSON.stringify(cache));
+}
 
 async function resolvePreviewImage(url) {
   if (previewCache[url] !== undefined) return previewCache[url];
@@ -74,31 +86,45 @@ async function resolvePreviewImage(url) {
   }
 }
 
-function loadThumb(containerEl, url, searchFallback) {
+function loadThumb(containerEl, url, searchFallback, itemId) {
+  // check persisted cache first — same item always gets the same image
+  if (itemId) {
+    const stored = getPersistedImageCache()[itemId];
+    if (stored) {
+      applyThumbImg(containerEl, stored);
+      return;
+    }
+  }
+
   resolvePreviewImage(url).then(imgUrl => {
-    // bail out if this container was removed from the DOM by a re-render
     if (!containerEl.isConnected) return;
 
-    // if no OG image found and we have a search term, use Unsplash
-    // nonce prevents browser from serving a cached redirect meant for a different item
-    const nonce = Math.random().toString(36).slice(2, 7);
-    const src = imgUrl || (searchFallback
-      ? `https://source.unsplash.com/400x300/?food,${encodeURIComponent(searchFallback)}&nonce=${nonce}`
-      : null);
+    let src = imgUrl;
+    if (!src && searchFallback) {
+      // Unsplash Source: title-based query, consistent per title, no nonce
+      src = `https://source.unsplash.com/400x300/?${encodeURIComponent(searchFallback)}`;
+    }
     if (!src) return;
 
-    const img = document.createElement('img');
-    img.src = src;
-    img.alt = '';
-    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
-    img.onload = () => {
-      if (!containerEl.isConnected) { img.remove(); return; }
-      const ph = containerEl.querySelector('.recent-thumb-placeholder, .thumb-placeholder');
-      if (ph) ph.style.display = 'none';
-    };
-    img.onerror = () => { img.remove(); };
-    containerEl.appendChild(img);
+    // persist so this item always shows the same image
+    if (itemId) setPersistedImage(itemId, src);
+    applyThumbImg(containerEl, src);
   });
+}
+
+function applyThumbImg(containerEl, src) {
+  if (!containerEl.isConnected) return;
+  const img = document.createElement('img');
+  img.src = src;
+  img.alt = '';
+  img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;';
+  img.onload = () => {
+    if (!containerEl.isConnected) { img.remove(); return; }
+    const ph = containerEl.querySelector('.recent-thumb-placeholder, .thumb-placeholder');
+    if (ph) ph.style.display = 'none';
+  };
+  img.onerror = () => { img.remove(); };
+  containerEl.appendChild(img);
 }
 
 // ── TOAST ─────────────────────────────────────────────────────
@@ -247,7 +273,7 @@ function renderDetailCol(containerId, items, type, getData, saveData) {
 
     // load preview image; for recipes fall back to title-based image search
     const thumb = card.querySelector('.detail-card-thumb');
-    loadThumb(thumb, item.url, type === 'recipes' ? item.title : null);
+    loadThumb(thumb, item.url, type === 'recipes' ? item.title : null, item.id);
 
     // like handler
     card.querySelector('.like-btn').addEventListener('click', () => {
@@ -363,7 +389,7 @@ function renderRecentFeed() {
     list.appendChild(div);
 
     const thumb = div.querySelector('.recent-thumb');
-    loadThumb(thumb, item.url, item.type === 'recipes' ? item.title : null);
+    loadThumb(thumb, item.url, item.type === 'recipes' ? item.title : null, item.id);
   });
 }
 
