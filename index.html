@@ -3,112 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Check Diz Shit Out</title>
-  <link rel="stylesheet" href="styles.css" />
+  <title>Facts</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #000;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 1rem;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1 id="home-link" style="cursor:pointer;">Check Diz Shit Out 💪</h1>
-    <nav id="main-nav">
-      <button class="tab-btn active" data-tab="workouts">Workouts</button>
-      <button class="tab-btn" data-tab="recipes">Recipes</button>
-    </nav>
-  </header>
-
-  <!-- ===================== HOME VIEW ===================== -->
-  <div id="home-view">
-    <div class="page-layout">
-      <main>
-
-        <!-- WORKOUTS -->
-        <section id="workouts" class="tab-content active">
-          <div class="section-header">
-            <h2>Workout Videos</h2>
-            <p>Share workout videos from Instagram, YouTube, Facebook, or TikTok</p>
-          </div>
-          <div class="add-link-form">
-            <h3>Add a Workout Link</h3>
-            <div class="form-row">
-              <select id="workout-category">
-                <option value="">— Pick a Category —</option>
-                <option value="Back">Back</option>
-                <option value="Chest">Chest</option>
-                <option value="Biceps">Biceps</option>
-                <option value="Triceps">Triceps</option>
-                <option value="Shoulders">Shoulders</option>
-                <option value="Lats">Lats</option>
-                <option value="Abs">Abs</option>
-                <option value="Legs">Legs</option>
-                <option value="Functional Training">Functional Training</option>
-                <option value="Random">Random</option>
-              </select>
-              <input type="url" id="workout-url" placeholder="Paste video link here *" />
-              <input type="text" id="workout-title" placeholder="Title / description *" />
-              <button id="add-workout-btn">Add Link</button>
-            </div>
-          </div>
-          <div class="categories-grid" id="workout-categories"></div>
-        </section>
-
-        <!-- RECIPES -->
-        <section id="recipes" class="tab-content">
-          <div class="section-header">
-            <h2>Recipes</h2>
-            <p>Share recipe links with friends</p>
-          </div>
-          <div class="add-link-form">
-            <h3>Add a Recipe Link</h3>
-            <div class="form-row">
-              <select id="recipe-category">
-                <option value="">— Pick a Category —</option>
-                <option value="Breakfast">Breakfast</option>
-                <option value="Lunch">Lunch</option>
-                <option value="Dinner">Dinner</option>
-                <option value="Snack">Snack</option>
-                <option value="Dessert">Dessert</option>
-                <option value="PROTEIN">PROTEIN</option>
-                <option value="Random">Random</option>
-              </select>
-              <input type="url" id="recipe-url" placeholder="Paste recipe link here *" />
-              <input type="text" id="recipe-title" placeholder="Title / description *" />
-              <button id="add-recipe-btn">Add Link</button>
-            </div>
-          </div>
-          <div class="categories-grid" id="recipe-categories"></div>
-        </section>
-
-      </main>
-
-      <!-- RECENTLY ADDED SIDEBAR -->
-      <aside id="recent-feed">
-        <h3>Recently Added</h3>
-        <div id="recent-list"><p class="no-links">Nothing added yet</p></div>
-      </aside>
-    </div>
-  </div>
-
-  <!-- ===================== DETAIL VIEW ===================== -->
-  <div id="detail-view" class="hidden">
-    <div class="detail-header">
-      <button id="back-btn">← Back</button>
-      <div class="detail-title">
-        <span id="detail-emoji"></span>
-        <h2 id="detail-name"></h2>
-      </div>
-    </div>
-
-    <div class="detail-columns">
-      <div class="detail-col">
-        <h3 class="col-heading">🕐 Recently Added</h3>
-        <div id="detail-recent"></div>
-      </div>
-      <div class="detail-col">
-        <h3 class="col-heading">❤️ Most Liked</h3>
-        <div id="detail-liked"></div>
-      </div>
-    </div>
-  </div>
-
-  <script src="app.js"></script>
+  <h1>I know more about AI than you do Jennie</h1>
 </body>
 </html>
