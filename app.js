@@ -68,16 +68,30 @@ function setPersistedImage(itemId, src) {
 
 async function resolvePreviewImage(url) {
   if (previewCache[url] !== undefined) return previewCache[url];
+
   const ytId = getYouTubeId(url);
   if (ytId) {
     const thumb = `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`;
     previewCache[url] = thumb;
     return thumb;
   }
+
+  // Try microlink first
   try {
     const res  = await fetch(`https://api.microlink.io?url=${encodeURIComponent(url)}`);
     const json = await res.json();
     const img  = json?.data?.image?.url || null;
+    if (img) {
+      previewCache[url] = img;
+      return img;
+    }
+  } catch { /* fall through */ }
+
+  // Fallback: jsonlink.io — another free OG scraper
+  try {
+    const res  = await fetch(`https://jsonlink.io/api/extract?url=${encodeURIComponent(url)}`);
+    const json = await res.json();
+    const img  = json?.images?.[0] || null;
     previewCache[url] = img;
     return img;
   } catch {
