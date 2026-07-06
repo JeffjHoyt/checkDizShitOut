@@ -1,15 +1,15 @@
 // ── CATEGORY DEFINITIONS ──────────────────────────────────────
 const WORKOUT_CATEGORIES = [
-  { id: 'Back',               emoji: '🏋️' },
-  { id: 'Chest',              emoji: '💪' },
-  { id: 'Biceps',             emoji: '💪' },
-  { id: 'Triceps',            emoji: '💪' },
-  { id: 'Shoulders',          emoji: '🦾' },
-  { id: 'Lats',               emoji: '🏊' },
-  { id: 'Abs',                emoji: '🔥' },
-  { id: 'Legs',               emoji: '🦵' },
-  { id: 'Functional Training', emoji: '⚡' },
-  { id: 'Random',             emoji: '🎲' },
+  { id: 'Back',                emoji: '🏋️', img: 'https://images.unsplash.com/photo-1603287681836-b174ce5074c2?w=500&q=80' },
+  { id: 'Chest',               emoji: '💪', img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=500&q=80' },
+  { id: 'Biceps',              emoji: '💪', img: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=500&q=80' },
+  { id: 'Triceps',             emoji: '💪', img: 'https://images.unsplash.com/photo-1530822847156-5df684ec5ee1?w=500&q=80' },
+  { id: 'Shoulders',           emoji: '🦾', img: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=500&q=80' },
+  { id: 'Lats',                emoji: '🏊', img: 'https://images.unsplash.com/photo-1598971457999-ca4ef48a9a71?w=500&q=80' },
+  { id: 'Abs',                 emoji: '🔥', img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80' },
+  { id: 'Legs',                emoji: '🦵', img: 'https://images.unsplash.com/photo-1434608519344-49d77a124f18?w=500&q=80' },
+  { id: 'Functional Training', emoji: '⚡', img: 'https://images.unsplash.com/photo-1517438476312-10d79c077509?w=500&q=80' },
+  { id: 'Random',              emoji: '🎲', img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=500&q=80' },
 ];
 
 const RECIPE_CATEGORIES = [
@@ -215,15 +215,13 @@ function renderCategoryGrid(type, categories, getData) {
     const items = getData().filter(i => i.category === cat.id);
     const card = document.createElement('div');
     card.className = 'category-card';
+    if (type === 'workouts' && cat.img) {
+      card.style.backgroundImage = `url('${cat.img}')`;
+    }
     card.innerHTML = `
-      <div class="category-card-header">
-        <span class="category-name">
-          <span class="category-emoji">${cat.emoji}</span>${cat.id}
-        </span>
-        <span style="display:flex;align-items:center;gap:0.4rem">
-          <span class="category-count">${items.length}</span>
-          <span class="category-arrow">→</span>
-        </span>
+      <div class="category-card-overlay">
+        <span class="category-card-name">${cat.id}</span>
+        ${items.length > 0 ? `<span class="category-count">${items.length}</span>` : ''}
       </div>
     `;
     card.addEventListener('click', () => navigate(`${type}/${encodeURIComponent(cat.id)}`));

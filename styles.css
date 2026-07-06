@@ -123,54 +123,62 @@ main { flex: 1; min-width: 0; }
 
 /* ── CATEGORY GRID ── */
 .categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
 .category-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  width: 250px;
+  height: 250px;
   border-radius: var(--radius);
   overflow: hidden;
   cursor: pointer;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  position: relative;
+  background-color: #222;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.category-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(230,57,70,.12); }
-
-.category-card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.9rem 1rem;
-  background: var(--surface2);
-  user-select: none;
-  gap: 0.5rem;
+.category-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
 }
 
-.category-name {
-  font-weight: 700;
-  font-size: 1rem;
+.category-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  transition: background 0.2s;
 }
-.category-emoji { font-size: 1.2rem; }
+.category-card:hover .category-card-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.category-card-name {
+  color: #fff;
+  font-size: 1.35rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 8px rgba(0,0,0,.5);
+}
 
 .category-count {
   background: var(--accent);
   color: #fff;
   border-radius: 999px;
-  padding: 0.1rem 0.55rem;
-  font-size: 0.75rem;
+  padding: 0.15rem 0.65rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  min-width: 22px;
+  min-width: 24px;
   text-align: center;
-}
-
-.category-arrow {
-  color: var(--muted);
-  font-size: 0.85rem;
 }
 
 /* ── RECENTLY ADDED SIDEBAR ── */
